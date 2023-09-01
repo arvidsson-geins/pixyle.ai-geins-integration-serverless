@@ -1,4 +1,6 @@
-const KlavyioParser = require("./klaviyoParser.js");
+const PixyleParser = require("./pixyleParser.js");
+const GeinsParser = require("./geinsParser.js");
 module.exports =  { 
-    KlavyioParser 
+    PixyleParser,
+    GeinsParser
 };

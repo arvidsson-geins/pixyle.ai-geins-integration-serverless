@@ -1,8 +1,10 @@
-const { QueueServiceClient } = require("@azure/storage-queue");
+const { QueueServiceClient } = require('@azure/storage-queue');
 
 class Queue {
   constructor(connectionString, queueName) {
-    this.queueServiceClient = QueueServiceClient.fromConnectionString(connectionString);
+    this.queueServiceClient = QueueServiceClient.fromConnectionString(
+      connectionString
+    );
     this.queueClient = this.queueServiceClient.getQueueClient(queueName);
     this.initPromise = this.initQueue();
   }
@@ -11,16 +13,18 @@ class Queue {
     try {
       await this.queueClient.createIfNotExists();
     } catch (error) {
-      console.error("Error initializing queue:", error.message);
+      console.error('Error initializing queue:', error.message);
     }
   }
 
   async enqueueMessage(message) {
     try {
       await this.initPromise;
-      await this.queueClient.sendMessage(Buffer.from(JSON.stringify(message)).toString("base64"));
+      await this.queueClient.sendMessage(
+        Buffer.from(JSON.stringify(message)).toString('base64')
+      );
     } catch (error) {
-      console.error("Error enqueuing message:", error.message);
+      console.error('Error enqueuing message:', error.message);
     }
   }
 
@@ -29,15 +33,15 @@ class Queue {
     try {
       await this.initPromise;
       for (const message of messages) {
-        await this.queueClient.sendMessage(Buffer.from(JSON.stringify(message)).toString("base64"));
-        await new Promise((resolve) => setTimeout(resolve, throttle));
+        await this.queueClient.sendMessage(
+          Buffer.from(JSON.stringify(message)).toString('base64')
+        );
+        await new Promise(resolve => setTimeout(resolve, throttle));
       }
     } catch (error) {
-      console.error("Error enqueuing messages:", error.message);
+      console.error('Error enqueuing messages:', error.message);
     }
   }
-
-
 }
 
 module.exports = Queue;

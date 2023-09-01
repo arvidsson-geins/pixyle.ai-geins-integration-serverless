@@ -1,5 +1,5 @@
-const { TableClient } = require("@azure/data-tables");
-const { AzureNamedKeyCredential } = require("@azure/core-auth");
+const { TableClient } = require('@azure/data-tables');
+const { AzureNamedKeyCredential } = require('@azure/core-auth');
 
 class TableStore {
   constructor(accountName, accountKey, tableName) {
@@ -14,10 +14,10 @@ class TableStore {
     try {
       await this.tableClient.createTable(this.tableName);
     } catch (error) {
-      if (error.statusCode === 409 && error.code === "TableAlreadyExists") {
-        console.log("Table already exists");
+      if (error.statusCode === 409 && error.code === 'TableAlreadyExists') {
+        console.log('Table already exists');
       } else {
-        console.error("Error initializing table:", error.message);
+        console.error('Error initializing table:', error.message);
       }
     }
   }
@@ -27,45 +27,45 @@ class TableStore {
       const { partitionKey, rowKey, ...rest } = dataObj;
       const entity = {
         partitionKey: partitionKey,
-        rowKey: rowKey || new Date().toISOString(),        
-        ...rest,
-      };      
+        rowKey: rowKey || new Date().toISOString(),
+        ...rest
+      };
       await this.tableClient.createEntity(entity);
     } catch (error) {
-      console.error("Error saving table data:", error.message);
-      console.error("Object:", dataObj);
+      console.error('Error saving table data:', error.message);
+      console.error('Object:', dataObj);
     }
   }
-  
+
   async createOrUpdateEntity(dataObj) {
     try {
       const { partitionKey, rowKey, ...rest } = dataObj;
       const entity = {
         partitionKey: partitionKey,
         rowKey: rowKey || new Date().toISOString(),
-        ...rest,
+        ...rest
       };
-      console.log("Creating or updating entity:", entity);
-  
+      console.log('Creating or updating entity:', entity);
+
       await this.tableClient.upsertEntity(entity);
     } catch (error) {
-      console.error("Error creating or updating entity:", error.message);
+      console.error('Error creating or updating entity:', error.message);
     }
   }
-  
+
   async createOrUpdateEntity(dataObj) {
     try {
       const { partitionKey, rowKey, ...rest } = dataObj;
       const entity = {
         partitionKey: partitionKey,
         rowKey: rowKey || new Date().toISOString(),
-        ...rest,
+        ...rest
       };
-      console.log("Creating or updating entity:", entity);
-  
+      ('Creating or updating entity:', entity);
+
       await this.tableClient.upsertEntity(entity);
     } catch (error) {
-      console.error("Error creating or updating entity:", error.message);
+      console.error('Error creating or updating entity:', error.message);
     }
   }
 
@@ -76,15 +76,21 @@ class TableStore {
 
       let filterString = '';
       if (filter) {
-        
         if (filter.partitionKey) {
           filterString += `PartitionKey eq '${filter.partitionKey}'`;
         }
         if (filter.rowKey) {
-          filterString += (filterString ? ' and ' : '') + `RowKey eq '${filter.rowKey}'`;
+          filterString +=
+            (filterString ? ' and ' : '') + `RowKey eq '${filter.rowKey}'`;
         }
         if (filter.startTime && filter.endTime) {
-          filterString += (filterString ? ' and ' : '') + `Timestamp gt ${filter.startTime} and Timestamp lt ${filter.endTime}`;
+          filterString +=
+            (filterString ? ' and ' : '') +
+            `Timestamp gt ${filter.startTime} and Timestamp lt ${filter.endTime}`;
+        }
+        if (filter.status) {
+          filterString +=
+            (filterString ? ' and ' : '') + `status eq '${filter.status}'`;
         }
       }
       const entities = this.tableClient.listEntities({
@@ -96,7 +102,7 @@ class TableStore {
 
       return data;
     } catch (error) {
-      console.error("Error fetching data:", error.message);
+      console.error('Error fetching data:', error.message);
       return [];
     }
   }
@@ -104,7 +110,7 @@ class TableStore {
   async getLatestEntity(partitionKey) {
     try {
       const queryOptions = {
-        filter: `PartitionKey eq '${partitionKey}'`,
+        filter: `PartitionKey eq '${partitionKey}'`
       };
       const entities = this.tableClient.listEntities({ queryOptions });
       let latestEntity = null;
@@ -115,16 +121,16 @@ class TableStore {
       }
       return latestEntity;
     } catch (error) {
-      console.error("Error fetching latest entity:", error.message);
+      console.error('Error fetching latest entity:', error.message);
       return null;
     }
-  }  
+  }
 
   async getLatestTimestamp(partitionKey) {
     try {
-        return returngetLatestEntity(partitionKey).timestamp
+      return returngetLatestEntity(partitionKey).timestamp;
     } catch (error) {
-      console.error("Error fetching latest entity:", error.message);
+      console.error('Error fetching latest entity:', error.message);
       return null;
     }
   }
@@ -135,17 +141,21 @@ class TableStore {
         filter: `PartitionKey eq '${partitionKey}'`
       };
       const entities = this.tableClient.listEntities({ queryOptions });
-  
+
       for await (const entity of entities) {
         await this.tableClient.deleteEntity(entity.partitionKey, entity.rowKey);
       }
-  
-      console.log(`All entities with partition key '${partitionKey}' have been deleted.`);
+
+      console.log(
+        `All entities with partition key '${partitionKey}' have been deleted.`
+      );
     } catch (error) {
-      console.error(`Error deleting entities with partition key '${partitionKey}':`, error.message);
+      console.error(
+        `Error deleting entities with partition key '${partitionKey}':`,
+        error.message
+      );
     }
   }
-
 }
 
 module.exports = TableStore;
