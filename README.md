@@ -1,10 +1,8 @@
-[![NPM Package][npm]][npm-url]
-[![NPM Downloads][npm-downloads-per-month]][npm-trends]
 ![Geins][mit-shield]
 
 [![Start Geins Free Trial][geins-tiral-img]][geins-tiral-url] [![Geins Docs][geins-docs-img]][geins-docs-url]
 
-[![geins-banner](https://raw.githubusercontent.com/geins-io/resources/master/images/banners/repos/pixyle-io.jpg)](https://www.geins.io)
+[![geins-banner](https://raw.githubusercontent.com/geins-io/resources/master/images/banners/repos/pixyle-io-integration.jpg)](https://www.geins.io)
 
 # Introduction
 
@@ -162,7 +160,11 @@ Create a new parameter/properties group in geins or use an existing one. Add the
 
 All returned pixyle attributes will be added to the `brokerTable`. You can then map the pixyle attributes to your geins `parmeterId` in the broker table.
 
-
+## Refrences
+- [Azure Functions JavaScript developer guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-node?tabs=v2)
+- [Azure Functions JavaScript developer guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-node?tabs=v2)
+- [Pixyle.ai guides](https://www.pixyle.ai/guides)
+- [Geins Management API](https://docs.geins.io)
 
 
 [npm]: https://img.shields.io/npm/v/@geins/pixyle-ai-geins-integration-serverless
