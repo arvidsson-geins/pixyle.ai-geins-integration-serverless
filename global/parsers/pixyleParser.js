@@ -16,6 +16,7 @@ class PixyleParser {
     const family = actionObject.family;
     const payload = actionObject.payload;
     const action = actionObject.action;
+
     switch (action) {
       case 'run':
         this.createDataset(actionObject);
@@ -40,6 +41,7 @@ class PixyleParser {
 
   async createDataset(actionObject) {
     const mgmtClient = new util.MgmtAPI();
+
     // get the product id
     const productId = actionObject.payload;
 
@@ -59,7 +61,6 @@ class PixyleParser {
 
     // create dataset for pixyle in JSON format
     const product = p.Resource[0];
-
     const dataset = await this.getDatasetFormatFromProduct(product);
 
     // get token from pixyle api
@@ -80,13 +81,15 @@ class PixyleParser {
         return dataset;
       });
 
-    //save in datastore
+    // save in datastore
     const dataStore = util.dataStore;
     dataStore.processTable.createOrUpdateEntity({
       partitionKey: datasetId,
       rowKey: productId,
       status: 'creating'
     });
+
+
   }
 
   async processDataset(actionObject) {
@@ -198,7 +201,8 @@ class PixyleParser {
     util.dataStore.processTable.createOrUpdateEntity({
       partitionKey: datasetId,
       rowKey: ds[0].rowKey,
-      status: 'saving'
+      status: 'saving',
+      data: JSON.stringify(productResult)
     });
 
     // place in queue to save
@@ -211,7 +215,7 @@ class PixyleParser {
   }
 
   async getDatasetFormatFromProduct(product) {
-    // https://drive.google.com/file/d/1wJH6omTK4g2cmohX9sMA3s0lAl3_ywT_/view
+    // docs: https://drive.google.com/file/d/1wJH6omTK4g2cmohX9sMA3s0lAl3_ywT_/view
 
     const images = product.Images;
 

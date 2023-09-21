@@ -82,6 +82,7 @@ class GeinsParser {
       partitionKey: datasetId,
       rowKey: productId,
       status: 'saved'
+
     });
   }
 

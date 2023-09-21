@@ -45,7 +45,6 @@ class TableStore {
         rowKey: rowKey || new Date().toISOString(),
         ...rest
       };
-      console.log('Creating or updating entity:', entity);
 
       await this.tableClient.upsertEntity(entity);
     } catch (error) {
